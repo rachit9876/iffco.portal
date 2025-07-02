@@ -1,0 +1,73 @@
+<!-- certificate.php -->
+<?php
+session_start();
+require_once '../db_connect.php';
+
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION['role'] !== 'user') {
+    header("location: ../index.php");
+    exit;
+}
+
+$user_id = $_SESSION['id'];
+
+// Fetch user info
+$stmt = $conn->prepare("SELECT name, roll_no, department, batch, college, created_at, duration FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+
+// Fetch project info
+$stmt = $conn->prepare("SELECT project_name, file_path, report_path, submission_date FROM projects WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$project = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+$unlocked = !empty($project['file_path']) && !empty($project['report_path']);
+
+if (!$unlocked) {
+  echo '<div style="text-align:center; padding:50px; font-family:sans-serif;">
+          <h2 style="color:#dc2626; font-size:24px;">Certificate Locked</h2>
+          <p>Please upload <strong>project.zip</strong> and <strong>report.pdf</strong> to view your certificate.</p>
+        </div>';
+  exit;
+}
+
+$name = htmlspecialchars($user['name']);
+$roll_no = htmlspecialchars($user['roll_no']);
+$branch = htmlspecialchars($user['department']);
+$college = htmlspecialchars($user['college']);
+$batch = htmlspecialchars($user['batch']);
+$project_name = htmlspecialchars($project['project_name']);
+$issue_date = date("d/m/Y", strtotime($project['submission_date']));
+$startDateObj = DateTime::createFromFormat('Y-m-d H:i:s', $user['created_at']);
+$months = (int) filter_var($user['duration'], FILTER_SANITIZE_NUMBER_INT);
+
+$endDateObj = clone $startDateObj;
+$endDateObj->modify("+$months months");
+
+$start_date = $startDateObj->format('d-m-Y');
+$end_date = $endDateObj->format('d-m-Y');
+
+$ref_no = "Voc Trainee / Internee / $batch / $roll_no";
+
+ob_start();
+include 'certificate_template.html';
+$page = ob_get_clean();
+
+$replace = [
+  '{name}' => $name,
+  '{roll_no}' => $roll_no,
+  '{department}' => $branch,
+  '{college}' => $college,
+  '{batch}' => $batch,
+  '{project_name}' => $project_name,
+  '{issue_date}' => $issue_date,
+  '{start_date}' => $start_date,
+  '{end_date}' => $end_date,
+];
+
+echo strtr($page, $replace);
+?>
