@@ -1,12 +1,31 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jul 05, 2025 at 08:10 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT;
-SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS;
-SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION;
-SET NAMES utf8mb4;
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `if0_38954512_user`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `certificates`
+--
 
 CREATE TABLE `certificates` (
   `id` int(11) NOT NULL,
@@ -15,6 +34,12 @@ CREATE TABLE `certificates` (
   `qr_code_path` varchar(255) DEFAULT NULL,
   `issue_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects`
+--
 
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL,
@@ -26,10 +51,18 @@ CREATE TABLE `projects` (
   `submission_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `projects`
+--
+
 INSERT INTO `projects` (`id`, `user_id`, `project_name`, `file_path`, `report_path`, `status`, `submission_date`) VALUES
-(3, 14, 'EMS', 'uploads/25CS1/project.zip', 'uploads/25CS1/report.pdf', 'Completed', '2025-06-26 06:11:01'),
-(4, 23, 'EMS', 'uploads/25INST1/project.zip', 'uploads/25INST1/report.pdf', 'Completed', '2025-06-26 06:58:06'),
-(5, 25, 'IFFCO E-Procurement Portal', 'uploads/25CS3/project.zip', 'uploads/25CS3/report.pdf', 'Completed', '2025-06-27 17:16:25');
+(6, 28, 'VC', 'uploads/25CHE1/project.zip', 'uploads/25CHE1/report.pdf', 'Completed', '2025-07-05 17:36:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -49,46 +82,83 @@ CREATE TABLE `users` (
   `duration` varchar(20) DEFAULT NULL,
   `noc_path` varchar(255) DEFAULT NULL,
   `referral_type` varchar(50) DEFAULT NULL,
-  `referral_path` varchar(255) DEFAULT NULL
+  `referral_path` varchar(255) DEFAULT NULL,
+  `toggle_status` enum('ON','OFF') NOT NULL DEFAULT 'OFF'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `roll_no`, `department`, `batch`, `contact_info`, `role`, `status`, `created_at`, `college`, `program`, `semester`, `duration`, `noc_path`, `referral_type`, `referral_path`) VALUES
-(1, 'Admin User', 'admin@example.com', '$2y$10$i8qZYMQpnCArs9SgudeOp..Svvhx2c2N5kek.hAo8mywmfaO4gcg6', NULL, NULL, NULL, NULL, 'admin', 'approved', '2025-06-22 06:18:36', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(14, 'Student User', 'student@example.com', '$2y$10$4qQsKUUG.nu9N48QEl6ze.FBp0nUJWdOESNiS3eX1qOl5afHdWlLK', '25CS1', 'CS', '2025', '90909090909', 'user', 'approved', '2025-06-24 14:42:35', 'AMITY', NULL, 'III', NULL, 'uploads/25CS1/noc_685ab95b92cc6_New Text Document.pdf', 'University', 'uploads/25CS1/ref_685ab95b92cca_New Text Document.pdf'),
-(18, 'Sumit', 's@s.com', '$2y$10$5d1qjayXQpLa.KZU/K12CeJ4CpV2jjRbYnegjaWFmWCeDHb46gHCy', '25CS2', 'CS', '2025', 'N/A', 'user', 'approved', '2025-06-24 16:31:52', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(23, 'Rachit', 'r@r.com', '$2y$10$UjjM5/mQInHEIrYaGC78FeNWS6naqD/hC7p3UV/6pZH5Tc7rkA6uy', '25INST1', 'Instrumentation', '2025', '90909090909', 'user', 'approved', '2025-06-24 19:16:49', 'KIIT', 'B.Sc.', 'IX', '1 Month', 'uploads/25INST1/noc.pdf', 'Employee', 'uploads/25INST1/referral.pdf'),
-(24, 'Surya Mani Pandey', 'smpandey@iffco.in', '$2y$10$05ZIgU16vItxwEhPNZV6Y.QT5ykOnkp0v9BDV3Jd6Xe6eIDoi8qy6', '25CHE1', 'Chemical', '2025', '90909090909', 'user', 'approved', '2025-06-24 19:18:43', 'AMITY', 'PhD', 'IX', '2 Month', 'uploads/25CHE1/noc.pdf', 'University', 'uploads/25CHE1/referral.pdf'),
-(25, 'Rachit Pandey', 'rachit@gmail.com', '$2y$10$otT/6OxvxW24Utp.wlhbSeYM7DF9oESoCjejaq4JzUUvaCnkgW7QS', '25CS3', 'CS', '2025', '9616425263', 'user', 'approved', '2025-06-27 16:59:22', 'KIIT', 'B.Tech.', 'VIII', '2 Month', 'uploads/25CS3/noc.pdf', 'University', 'uploads/25CS3/referral.pdf');
+--
+-- Dumping data for table `users`
+--
 
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `roll_no`, `department`, `batch`, `contact_info`, `role`, `status`, `created_at`, `college`, `program`, `semester`, `duration`, `noc_path`, `referral_type`, `referral_path`, `toggle_status`) VALUES
+(1, 'Admin User', 'admin@example.com', '$2y$10$i8qZYMQpnCArs9SgudeOp..Svvhx2c2N5kek.hAo8mywmfaO4gcg6', NULL, NULL, NULL, NULL, 'admin', 'approved', '2025-06-22 06:18:36', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ON'),
+(28, 'Student User', 'student@example.com', '$2y$10$PcvkNdVdkf1Mdl/lUICoLOFoQPVmEbbIZ6CL.li1BDJcEfSL.pXLa', '25CHE1', 'Chemical', '2025', '90909090909', 'user', 'approved', '2025-07-04 03:27:13', 'SRM', 'B.Sc.', 'I', '1 Month', 'uploads/25CHE1/noc.pdf', 'Organization', 'uploads/25CHE1/referral.pdf', 'OFF');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `certificates`
+--
 ALTER TABLE `certificates`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `user_id` (`user_id`);
 
+--
+-- Indexes for table `projects`
+--
 ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
+--
+-- Indexes for table `users`
+--
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `roll_no` (`roll_no`);
 
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `certificates`
+--
 ALTER TABLE `certificates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
+--
+-- AUTO_INCREMENT for table `projects`
+--
 ALTER TABLE `projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
+--
+-- AUTO_INCREMENT for table `users`
+--
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `certificates`
+--
 ALTER TABLE `certificates`
   ADD CONSTRAINT `certificates_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
+--
+-- Constraints for table `projects`
+--
 ALTER TABLE `projects`
   ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
-SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT;
-SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS;
-SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
