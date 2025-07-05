@@ -65,7 +65,17 @@ if ($roll_no && is_dir($upload_dir)) {
 </head>
 <body class="bg-gray-100 p-8">
 
-    <div class="max-w-4xl mx-auto space-y-6">
+
+
+    <!-- Fixed Header Strip -->
+    <div class="fixed top-0 left-0 w-full bg-white shadow z-50 flex items-center px-4 py-3 border-b">
+        <a href="students.php" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm font-semibold shadow">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+        </a>
+        <span class="ml-4 text-lg font-semibold text-gray-700">Student Documents</span>
+    </div>
+
+    <div class="max-w-4xl mx-auto space-y-6 pt-20">
 
         <!-- Student Info Card -->
         <?php if ($student): ?>
@@ -112,9 +122,7 @@ if ($roll_no && is_dir($upload_dir)) {
                 </ul>
             <?php endif; ?>
 
-            <div class="mt-6">
-                <a href="students.php" class="text-blue-500 hover:underline">&larr; Back to Students</a>
-            </div>
+            <!-- Back to Students button moved to top -->
         </div>
     </div>
 

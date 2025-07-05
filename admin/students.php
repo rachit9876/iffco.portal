@@ -129,12 +129,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['issue_certificate'])) 
 }
 
 // Fetch all students
+
 $students = [];
-$sql = "SELECT u.id, u.name, u.email, u.roll_no, u.department, c.id as certificate_id 
-        FROM users u 
-        LEFT JOIN certificates c ON u.id = c.user_id 
-        WHERE u.role = 'user' AND u.status = 'approved' 
-        ORDER BY u.name";
+$sql = "SELECT u.id, u.name, u.email, u.roll_no, u.department,
+    (
+        SELECT status FROM projects p WHERE p.user_id = u.id ORDER BY p.id DESC LIMIT 1
+    ) as project_status
+FROM users u
+WHERE u.role = 'user' AND u.status = 'approved'
+ORDER BY u.name";
 
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
@@ -220,33 +223,31 @@ $page_title = "Trainee Management";
                             <td class="px-6 py-4 font-medium text-gray-900"><?php echo htmlspecialchars($student['name']); ?><br><span class="text-xs text-gray-500"><?php echo htmlspecialchars($student['email']); ?></span></td>
                             <td class="px-6 py-4"><?php echo htmlspecialchars($student['roll_no']); ?></td>
                             <td class="px-6 py-4"><?php echo htmlspecialchars($student['department']); ?></td>
+
                             <td class="px-6 py-4">
-                                <?php if ($student['certificate_id']): ?>
+                                <?php if (isset($student['project_status']) && $student['project_status'] === 'Completed'): ?>
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Issued</span>
                                 <?php else: ?>
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Not Issued</span>
                                 <?php endif; ?>
                             </td>
-                            <td class="px-6 py-4 flex items-center space-x-2">
-    <!-- View profile -->
-    <!-- View Docs -->
-<a href="view_docs.php?roll=<?php echo urlencode($student['roll_no']); ?>" target="_blank" class="text-gray-700 hover:text-blue-700" title="View Uploaded Documents">
-    <i class="fas fa-eye text-xl"></i>
-</a>
 
+<td class="px-6 py-4">
+    <div class="flex flex-col items-stretch space-y-1">
+        <!-- View Docs Button -->
+        <a href="view_docs.php?roll=<?php echo urlencode($student['roll_no']); ?>" target="_blank">
+            <button type="button" class="bg-gray-200 hover:bg-blue-200 text-gray-800 font-semibold text-xs py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 w-full" title="View Uploaded Documents">View Docs</button>
+        </a>
 
-    <!-- Issue Certificate -->
-    <button onclick="openCertModal(<?php echo $student['id']; ?>, '<?php echo htmlspecialchars(addslashes($student['name'])); ?>')" class="text-blue-600 hover:text-blue-900" title="Issue Certificate">
-        <i class="fas fa-award text-xl"></i>
-    </button>
+        <!-- Issue Certificate Button -->
+        <button type="button" onclick="openCertModal(<?php echo $student['id']; ?>, '<?php echo htmlspecialchars(addslashes($student['name'])); ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold text-xs py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 w-full" title="Issue Certificate">Issue Certificate</button>
 
-    <!-- Delete -->
-    <form action="students.php" method="post" onsubmit="return confirm('Are you sure you want to delete this student?');" class="inline">
-        <input type="hidden" name="student_id" value="<?php echo $student['id']; ?>">
-        <button type="submit" name="delete_student" class="text-red-600 hover:text-red-900" title="Delete Student">
-            <i class="fas fa-trash-alt text-xl"></i>
-        </button>
-    </form>
+        <!-- Delete Button -->
+        <form action="students.php" method="post" onsubmit="return confirm('Are you sure you want to delete this student?');" class="inline">
+            <input type="hidden" name="student_id" value="<?php echo $student['id']; ?>">
+            <button type="submit" name="delete_student" class="bg-red-500 hover:bg-red-700 text-white font-semibold text-xs py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-red-400 w-full" title="Delete Student">Delete</button>
+        </form>
+    </div>
 </td>
 
                             

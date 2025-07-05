@@ -126,9 +126,9 @@ $page_title = "Admin Dashboard";
                     <i class="fas fa-user-plus mr-2"></i>
                     Add New Student
                 </a>
-                <a href="students.php?action=import" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center">
-                    <i class="fas fa-file-csv mr-2"></i>
-                    Bulk Import Students
+                <a href="control.php" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center">
+                    <i class="fas fa-sliders-h mr-2"></i>
+                    Advance view
                 </a>
             </div>
         </div>

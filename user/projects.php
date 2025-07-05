@@ -120,14 +120,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["project_file"])) {
 $project = null;
 $report_uploaded = false;
 $project_uploaded = false;
-$stmt = $conn->prepare("SELECT project_name, status, submission_date, file_path, report_path FROM projects WHERE user_id = ?");
+
+// Fetch project data and ensure status logic
+$stmt = $conn->prepare("SELECT id, project_name, status, submission_date, file_path, report_path FROM projects WHERE user_id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $project = $result->fetch_assoc();
-    if (!empty($project['file_path'])) $project_uploaded = true;
-    if (!empty($project['report_path'])) $report_uploaded = true;
+    $project_uploaded = !empty($project['file_path']) && file_exists($project['file_path']);
+    $report_uploaded = !empty($project['report_path']) && file_exists($project['report_path']);
+
+    // Only set status to Completed if both files are present, else blank
+    $new_status = ($project_uploaded && $report_uploaded) ? 'Completed' : '';
+    if ($project['status'] !== $new_status) {
+        $stmt2 = $conn->prepare("UPDATE projects SET status = ? WHERE id = ?");
+        $stmt2->bind_param("si", $new_status, $project['id']);
+        $stmt2->execute();
+        $stmt2->close();
+        $project['status'] = $new_status;
+    }
+} else {
+    $project_uploaded = false;
+    $report_uploaded = false;
 }
 $stmt->close();
 $conn->close();
@@ -151,6 +166,25 @@ $conn->close();
 
 <style>
   body { font-family: 'Inter', sans-serif; }
+
+  #projectNameTooltip:hover #projectNameTooltipHoverMsg {
+    color: #fde047 !important; /* yellow-200 */
+    opacity: 1;
+    animation: tooltip-bounce 0.5s;
+  }
+  #projectNameTooltip #projectNameTooltipHoverMsg {
+    color: #fef9c3 !important; /* faded yellow for non-hover */
+    opacity: 0.7;
+    transition: color 0.2s, opacity 0.2s;
+  }
+
+  @keyframes tooltip-bounce {
+    0%   { transform: translateY(0); }
+    30%  { transform: translateY(-8px); }
+    50%  { transform: translateY(0); }
+    70%  { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+  }
 
   .mobile-menu-button {
     display: none;
@@ -285,8 +319,17 @@ $conn->close();
 
       <!-- Project Upload -->
       <form action="projects.php" method="post" enctype="multipart/form-data" class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
-        <input type="text" name="project_name" required class="mb-3 w-full border px-3 py-2 rounded">
+
+        <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center">Project Name
+          <button type="button" tabindex="-1" id="projectNameHelpBtn" class="ml-2 text-blue-500 hover:text-blue-700 focus:outline-none relative font-bold text-xs w-4 h-4 flex items-center justify-center rounded-full border border-blue-300 bg-blue-50" style="line-height:1; padding:0; min-width:1rem; min-height:1rem;" onclick="document.getElementById('projectNameTooltip').classList.toggle('hidden')">?
+            <div id="projectNameTooltip" class="hidden absolute z-10 bg-gray-800 text-white text-xs rounded py-2 px-3 mt-2 left-1/2 transform -translate-x-1/2 shadow-lg" style="min-width:200px;">
+              <span style="white-space:nowrap;">Project "Name" will be highlighted</span><br>
+              <span style="white-space:nowrap;">on your certificate.</span><br>
+              <span style="white-space:nowrap;" class="block mt-2 text-yellow-200" id="projectNameTooltipHoverMsg"></span>
+            </div>
+          </button>
+        </label>
+        <input type="text" name="project_name" required class="mb-3 w-full border px-3 py-2 rounded" placeholder="Enter Project Name (Eg. EMS, DBMS...)">
 
         <label class="block text-sm font-medium text-gray-700 mb-1">Upload Project (.zip, max 30MB)</label>
         <input type="file" name="project_file" accept=".zip" class="mb-3 w-full text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
@@ -355,6 +398,25 @@ $conn->close();
 </main>
 
 <script>
+  // Show tooltip on hover as well as click
+  document.addEventListener('DOMContentLoaded', function() {
+    const projectNameHelpBtn = document.getElementById('projectNameHelpBtn');
+    const projectNameTooltip = document.getElementById('projectNameTooltip');
+    if (projectNameHelpBtn && projectNameTooltip) {
+      projectNameHelpBtn.addEventListener('mouseenter', function() {
+        projectNameTooltip.classList.remove('hidden');
+      });
+      projectNameHelpBtn.addEventListener('mouseleave', function() {
+        projectNameTooltip.classList.add('hidden');
+      });
+      projectNameTooltip.addEventListener('mouseenter', function() {
+        projectNameTooltip.classList.remove('hidden');
+      });
+      projectNameTooltip.addEventListener('mouseleave', function() {
+        projectNameTooltip.classList.add('hidden');
+      });
+    }
+  });
   // Toggle mobile menu
   const menuButton = document.querySelector('.mobile-menu-button');
   const sidebar = document.querySelector('.sidebar');
@@ -374,6 +436,18 @@ $conn->close();
       });
     });
   }
+
+  // Hide project name tooltip when clicking outside
+  document.addEventListener('click', function(event) {
+    const tooltip = document.getElementById('projectNameTooltip');
+    const btn = document.getElementById('projectNameHelpBtn');
+    if (!tooltip || !btn) return;
+    if (!tooltip.classList.contains('hidden')) {
+      if (!tooltip.contains(event.target) && !btn.contains(event.target)) {
+        tooltip.classList.add('hidden');
+      }
+    }
+  });
 </script>
 
 

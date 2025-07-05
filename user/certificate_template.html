@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Training Certificate</title>
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: #fff;
+    font-family: 'Courier Prime', monospace;
+  }
+
+  /* Certificate dimensions for printing/export */
+  .certificate-container {
+    width: 210mm;
+    height: 297mm;
+    background: white;
+  }
+
+  /* Hidden certificate for capture (without scaling) */
+  #certificate-capture {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 210mm;
+    height: 297mm;
+    background: white;
+  }
+
+  .stamp-container {
+    position: relative;
+    display: inline-block;
+    float: right;
+  }
+
+  .stamp {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: auto;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .yellow-strip {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  .download-btn {
+  position: fixed;
+  bottom: 20px;
+  z-index: 1000;
+  background-color: #3b82f6;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Desktop: Right position */
+@media (min-width: 992px) {
+  .download-btn {
+    right: 20px;
+  }
+}
+
+/* Mobile: Centered horizontally */
+@media (max-width: 991px) {
+  .download-btn {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+
+  .download-btn:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Hide preview by default (mobile) */
+.scale-wrapper {
+  display: none;
+}
+
+/* Show + scale on tablet and larger */
+@media (min-width: 768px) {
+  .scale-wrapper {
+    display: flex;
+    justify-content: center;
+    transform: scale(0.7);
+    transform-origin: top center;
+    padding: 40px 0 100px;
+  }
+}
+
+/* Further scale for ultra-wide desktops */
+@media (min-width: 1440px) {
+  .scale-wrapper {
+    transform: scale(0.85);
+  }
+}
+
+
+  @media print {
+    .scale-wrapper {
+      transform: none !important;
+      padding: 0 !important;
+    }
+    .download-btn {
+      display: none;
+    }
+  }
+</style>
+
+<style>
+  .text-primary { color: #36015d; }
+  .bg-primary { background-color: #36015d; }
+  .bg-primary:hover { background-color: #2a0149; }
+
+  .text-secondary { color: #c783fe; }
+  .bg-secondary { background-color: #c783fe; }
+</style>
+
+
+</head>
+<body class="bg-white">
+
+<!-- Mobile Glass Popup -->
+<div id="popupOverlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden items-center justify-center z-[9999]">
+  <div class="bg-white bg-opacity-25 backdrop-blur-lg rounded-2xl border border-white border-opacity-20 shadow-xl p-8 w-4/5 max-w-md text-center">
+    <h2 class="text-primary text-2xl font-bold mb-4">Open in Computer</h2>
+    <p class="text-primary mb-6">For better viewing experience, please open this page on a computer.</p>
+    <button id="popupBtn" class="bg-primary hover:bg-opacity-90 text-white font-medium py-2 px-6 rounded-full transition-all duration-300 hover:-translate-y-1">
+      OK
+    </button>
+  </div>
+</div>
+
+
+
+<!-- Download Button -->
+<button id="downloadBtn" class="download-btn">
+  <i class="fas fa-download mr-2"></i> Download Certificate
+</button>
+
+<!-- Visible Certificate (with scaling for display) -->
+<div class="scale-wrapper hidden md:flex">
+
+  <div id="certificate" class="certificate-container border border-gray-300 flex relative shadow-lg">
+    <!-- Your certificate content here (same as before) -->
+    <!-- Fixed Yellow Strip -->
+    <div class="bg-yellow-400 w-12 flex flex-col justify-center items-center py-4">
+      <p class="text-blue-900 text-[14px] font-semibold leading-tight yellow-strip" style="line-height:1.1;">
+        <br />
+        <span class="uppercase"> </span>
+      </p>
+    </div>
+
+    <!-- Main Certificate Body -->
+    <div class="flex-1 px-8 pt-6 pb-10">
+      <!-- Header -->
+      <div class="flex flex-col items-center space-y-1 mb-6">
+        <img src="/uploads/IFFCOlogo.svg" alt="IFFCO Logo" class="w-[120px] h-[40px] object-contain" />
+        <p class="text-center font-semibold text-[18px] leading-tight">इंडियन फार्मर्स फर्टिलाइजर कोऑपरेटिव लिमिटेड</p>
+        <p class="text-center font-semibold text-[18px] leading-tight">INDIAN FARMERS FERTILISER CO-OPERATIVE LTD.</p>
+      </div>
+
+      <!-- Title -->
+      <div class="text-center mb-6">
+        <p class="font-bold italic text-[18px] leading-tight">TRAINING CENTRE</p>
+      </div>
+
+      <!-- Ref Info -->
+      <div class="flex justify-between mb-6 text-[14px]">
+        <p class="italic font-semibold">Ref NO : <span class="font-normal">Voc Trainee / Internee / {batch} / {roll_no}</span></p>
+        <p class="italic font-semibold">DATE : <span class="font-normal">{issue_date}</span></p>
+      </div>
+
+      <!-- Trainee Info -->
+      <div class="text-[14px] leading-snug">
+        <div class="flex mb-1"><p class="font-bold w-36">NAME OF TRAINEE</p><p class="w-2">:</p><p class="whitespace-pre-wrap">{name}</p></div>
+        <div class="flex mb-1"><p class="font-bold w-36">BRANCH</p><p class="w-2">:</p><p class="whitespace-pre-wrap">{department}</p></div>
+        <div class="flex mb-1"><p class="font-bold w-36">INSTITUTION</p><p class="w-2">:</p><p class="whitespace-pre-wrap">{college}</p></div>
+        <div class="flex mb-1"><p class="font-bold w-36">TRAINING SCHEME</p><p class="w-2">:</p><p class="whitespace-pre-wrap">Unpaid Vocational Training / Unpaid Internship</p></div>
+        <div class="flex mb-1"><p class="font-bold w-36">TRAINING PERIOD</p><p class="w-2">:</p><p><span class="font-semibold">  From</span>: {start_date} <span class="font-semibold ml-4">To</span>: {end_date}</p></div>
+        <div class="flex mb-1"><p class="font-bold w-36">PERFORMANCE</p><p class="w-2">:</p><p>Very Good</p></div>
+        <div class="flex mb-6"><p class="font-bold w-36">PROJECT TOPIC</p><p class="w-2">:</p><p>{project_name}</p></div>
+
+        <!-- Certification Text -->
+        <p class="mb-6 text-[14px]">This is to certify that the student, whose details are given above, has taken his/her training / internship during period* of {start_date} To {end_date}</p>
+        <p class="mb-10 text-[14px]">I wish Him/Her all the best for his/her future endeavours</p>
+
+        <!-- Signature with Stamp -->
+        <div class="stamp-container">
+          <p class="italic font-bold text-right mb-16">
+            Head<br />
+            Training Centre
+          </p>
+          <img src="/uploads/stamp.png" alt="Stamp" class="stamp" />
+        </div>
+
+        <!-- Disclaimer -->
+        <p class="italic text-[12px] font-semibold clear-both">* It does not certify the attendance of the student during the mentioned period.</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-10 text-[12px] font-bold leading-tight">
+        <p>P.O. Ghiyanagar, Prayagraj-212404 (U.P.) Phone : (05332) 253374,251243</p>
+        <p class="mb-1">पोस्ट : घियनागर, प्रयागराज-212404 (उ0प्र0) फोन : (05332) 253374, 251243</p>
+        <p class="mb-1">तार / Gram : इफ्को घियनागर, एफेक्स / Fax : General - (05332) 251252, Maintenance (05332) 251263</p>
+        <p>ईमेल / E-Mail : phulpur@iffco.in वेबसाइट / Website : www.iffco.in</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden Certificate for Capture (without scaling) -->
+<div id="certificate-capture" class="certificate-container border border-gray-300 flex relative">
+  <!-- Duplicate of your certificate content here -->
+  <!-- Fixed Yellow Strip -->
+  <div class="bg-yellow-400 w-12 flex flex-col justify-center items-center py-4">
+    <p class="text-blue-900 text-[14px] font-semibold leading-tight yellow-strip" style="line-height:1.1;">
+       <br />
+      <span class="uppercase"> </span>
+    </p>
+  </div>
+
+  <!-- Main Certificate Body -->
+  <div class="flex-1 px-8 pt-6 pb-10">
+    <!-- Header -->
+    <div class="flex flex-col items-center space-y-1 mb-6">
+      <img src="/uploads/IFFCOlogo.svg" alt="IFFCO Logo" class="w-[120px] h-[40px] object-contain" />
+      <p class="text-center font-semibold text-[18px] leading-tight">इंडियन फार्मर्स फर्टिलाइजर कोऑपरेटिव लिमिटेड</p>
+      <p class="text-center font-semibold text-[18px] leading-tight">INDIAN FARMERS FERTILISER CO-OPERATIVE LTD.</p>
+    </div>
+
+    <!-- Title -->
+    <div class="text-center mb-6">
+      <p class="font-bold italic text-[18px] leading-tight">TRAINING CENTRE</p>
+    </div>
+
+    <!-- Ref Info -->
+    <div class="flex justify-between mb-6 text-[14px]">
+      <p class="italic font-semibold">Ref NO : <span class="font-normal">Voc Trainee / Internee / {batch} / {roll_no}</span></p>
+      <p class="italic font-semibold">DATE : <span class="font-normal">{issue_date}</span></p>
+    </div>
+
+    <!-- Trainee Info -->
+    <div class="text-[14px] leading-snug">
+      <div class="flex mb-1"><p class="font-bold w-36">NAME OF TRAINEE</p><p class="w-2">:</p><p class="whitespace-pre-wrap">{name}</p></div>
+      <div class="flex mb-1"><p class="font-bold w-36">BRANCH</p><p class="w-2">:</p><p class="whitespace-pre-wrap">{department}</p></div>
+      <div class="flex mb-1"><p class="font-bold w-36">INSTITUTION</p><p class="w-2">:</p><p class="whitespace-pre-wrap">{college}</p></div>
+      <div class="flex mb-1"><p class="font-bold w-36">TRAINING SCHEME</p><p class="w-2">:</p><p class="whitespace-pre-wrap">Unpaid Vocational Training / Unpaid Internship</p></div>
+      <div class="flex mb-1"><p class="font-bold w-36">TRAINING PERIOD</p><p class="w-2">:</p><p><span class="font-semibold">  From</span>: {start_date} <span class="font-semibold ml-4">To</span>: {end_date}</p></div>
+      <div class="flex mb-1"><p class="font-bold w-36">PERFORMANCE</p><p class="w-2">:</p><p>Very Good</p></div>
+      <div class="flex mb-6"><p class="font-bold w-36">PROJECT TOPIC</p><p class="w-2">:</p><p>{project_name}</p></div>
+
+      <!-- Certification Text -->
+      <p class="mb-6 text-[14px]">This is to certify that the student, whose details are given above, has taken his/her training / internship during period* of {start_date} To {end_date}</p>
+      <p class="mb-10 text-[14px]">I wish Him/Her all the best for his/her future endeavours</p>
+
+      <!-- Signature with Stamp -->
+      <div class="stamp-container">
+        <p class="italic font-bold text-right mb-16">
+          Head<br />
+          Training Centre
+        </p>
+        <img src="/uploads/stamp.png" alt="Stamp" class="stamp" />
+      </div>
+
+      <!-- Disclaimer -->
+      <p class="italic text-[12px] font-semibold clear-both">* It does not certify the attendance of the student during the mentioned period.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-10 text-[12px] font-bold leading-tight">
+      <p>P.O. Ghiyanagar, Prayagraj-212404 (U.P.) Phone : (05332) 253374,251243</p>
+      <p class="mb-1">पोस्ट : घियनागर, प्रयागराज-212404 (उ0प्र0) फोन : (05332) 253374, 251243</p>
+      <p class="mb-1">तार / Gram : इफ्को घियनागर, एफेक्स / Fax : General - (05332) 251252, Maintenance (05332) 251263</p>
+      <p>ईमेल / E-Mail : phulpur@iffco.in वेबसाइट / Website : www.iffco.in</p>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('downloadBtn').addEventListener('click', function() {
+  const btn = this;
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
+  btn.disabled = true;
+  
+  // Use the hidden certificate for capture (without scaling)
+  html2canvas(document.getElementById('certificate-capture'), {
+    scale: 2,
+    logging: false,
+    useCORS: true,
+    allowTaint: true,
+    scrollX: 0,
+    scrollY: 0,
+    windowWidth: document.getElementById('certificate-capture').scrollWidth,
+    windowHeight: document.getElementById('certificate-capture').scrollHeight
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'IFFCO_Certificate.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }).catch(err => {
+    console.error('Error generating certificate:', err);
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+    alert('Error generating certificate. Please try again.');
+  });
+});
+</script>
+
+
+<script>
+  // Show popup on mobile screens
+  if (window.innerWidth < 992) {
+    const popup = document.getElementById('popupOverlay');
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+  }
+
+  document.getElementById('popupBtn').addEventListener('click', function() {
+    document.getElementById('popupOverlay').classList.add('hidden');
+  });
+</script>
+
+
+</body>
+</html>

@@ -10,22 +10,57 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
 $message = '';
 $error = '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_id'])) {
-    $user_id = intval($_POST['user_id']);
-    $action = $_POST['action'];
+// Get admin ID and toggle status
+$admin_id = $_SESSION['id'];
+$stmt = $conn->prepare("SELECT toggle_status FROM users WHERE id = ? AND role = 'admin'");
+$stmt->bind_param("i", $admin_id);
+$stmt->execute();
+$stmt->bind_result($toggle_status);
+$stmt->fetch();
+$stmt->close();
 
-    if ($action == 'approve') {
-        $stmt = $conn->prepare("UPDATE users SET status = 'approved' WHERE id = ?");
-        $stmt->bind_param("i", $user_id);
-        $message = $stmt->execute() ? "Application approved." : "Error approving application.";
-    } elseif ($action == 'reject') {
-        $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-        $stmt->bind_param("i", $user_id);
-        $message = $stmt->execute() ? "Application rejected and removed." : "Error rejecting application.";
+// Handle POST actions
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Handle toggle switch
+    if (isset($_POST['toggle_status'])) {
+        $new_status = ($_POST['toggle_status'] === 'ON') ? 'ON' : 'OFF';
+        $stmt = $conn->prepare("UPDATE users SET toggle_status = ? WHERE id = ? AND role = 'admin'");
+        $stmt->bind_param("si", $new_status, $admin_id);
+        if ($stmt->execute()) {
+            $message = "Auto-approve has been turned " . $new_status . ".";
+            $toggle_status = $new_status; // update local value
+        } else {
+            $error = "Error updating auto-approve toggle.";
+        }
+        $stmt->close();
     }
+
+    // Handle approve/reject buttons
+    if (isset($_POST['user_id'], $_POST['action'])) {
+        $user_id = intval($_POST['user_id']);
+        $action = $_POST['action'];
+
+        if ($action === 'approve') {
+            $stmt = $conn->prepare("UPDATE users SET status = 'approved' WHERE id = ?");
+            $stmt->bind_param("i", $user_id);
+            $message = $stmt->execute() ? "Application approved." : "Error approving application.";
+        } elseif ($action === 'reject') {
+            $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+            $stmt->bind_param("i", $user_id);
+            $message = $stmt->execute() ? "Application rejected and removed." : "Error rejecting application.";
+        }
+        $stmt->close();
+    }
+}
+
+// Auto-approve logic if toggle is ON
+if ($toggle_status === 'ON') {
+    $stmt = $conn->prepare("UPDATE users SET status = 'approved' WHERE status = 'pending'");
+    $stmt->execute();
     $stmt->close();
 }
 
+// Fetch pending applications
 $applications = [];
 $sql = "SELECT id, name, email, roll_no, department, batch, contact_info, created_at, noc_path, referral_path 
         FROM users 
@@ -44,9 +79,7 @@ $page_title = "New Applications";
 <head>
     <meta charset="UTF-8">
     <title><?php echo $page_title; ?> - IFFCO Portal</title>
-    <!-- <link href="/assets/CSS/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script> Back Up--> 
-  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style> body { font-family: 'Inter', sans-serif; } </style>
@@ -77,10 +110,23 @@ $page_title = "New Applications";
     <header class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800"><?php echo $page_title; ?></h1>
         <p class="text-gray-600">Review and process new trainee sign-up requests.</p>
+
+        <!-- Auto Approve Toggle Form -->
+        <form method="post" class="mt-4 inline-block">
+            <input type="hidden" name="toggle_status" value="<?php echo $toggle_status === 'ON' ? 'OFF' : 'ON'; ?>">
+            <button type="submit" class="px-4 py-2 rounded-lg text-sm font-bold
+                <?php echo $toggle_status === 'ON' ? 'bg-green-600 text-white' : 'bg-gray-400 text-black'; ?>">
+                Auto Approve: <?php echo $toggle_status; ?>
+            </button>
+        </form>
     </header>
 
-    <?php if ($message): ?><div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6"><?php echo $message; ?></div><?php endif; ?>
-    <?php if ($error): ?><div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6"><?php echo $error; ?></div><?php endif; ?>
+    <?php if ($message): ?>
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6"><?php echo $message; ?></div>
+    <?php endif; ?>
+    <?php if ($error): ?>
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6"><?php echo $error; ?></div>
+    <?php endif; ?>
 
     <div class="bg-white p-6 rounded-lg shadow-lg">
         <div class="space-y-6">
@@ -118,6 +164,5 @@ $page_title = "New Applications";
         </div>
     </div>
 </main>
-
 </body>
 </html>
