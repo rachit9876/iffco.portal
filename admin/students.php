@@ -5,7 +5,6 @@ ini_set('display_errors', 1);
 
 session_start();
 require_once '../db_connect.php';
-require_once 'qrcode/qrlib.php';  // Ensure this file exists!
 
 // Redirect if not admin
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION['role'] !== 'admin') {
@@ -107,16 +106,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['issue_certificate'])) 
     $target_file = $target_dir . $file_name;
 
     if (move_uploaded_file($file["tmp_name"], $target_file)) {
-        // QR code
-        $qr_dir = "../uploads/qr_codes/";
-        if (!file_exists($qr_dir)) mkdir($qr_dir, 0777, true);
-        $qr_file_path = $qr_dir . "qr-" . $student_id . ".png";
-        $certificate_url = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/verify.php?id=" . $student_id;
-        QRcode::png($certificate_url, $qr_file_path);
-
         // Insert/Update certificate
-        $stmt = $conn->prepare("INSERT INTO certificates (user_id, certificate_path, qr_code_path, issue_date) VALUES (?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE certificate_path = ?, qr_code_path = ?, issue_date = NOW()");
-        $stmt->bind_param("issss", $student_id, $target_file, $qr_file_path, $target_file, $qr_file_path);
+        $stmt = $conn->prepare("INSERT INTO certificates (user_id, certificate_path, issue_date) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE certificate_path = ?, issue_date = NOW()");
+        $stmt->bind_param("iss", $student_id, $target_file, $target_file);
         if ($stmt->execute()) {
             $message = "Certificate issued successfully.";
         } else {
