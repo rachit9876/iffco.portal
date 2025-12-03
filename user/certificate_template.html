@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFFCO Vocational Training Certificate</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600&display=swap');
+
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Merriweather', serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 297mm;
+            aspect-ratio: 297 / 210;
+        }
+
+        .page {
+            background: white;
+            width: 100%;
+            height: 100%;
+            padding: 3.37%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .border-container {
+            border: 5px double #1a5f7a;
+            height: 100%;
+            padding: 2.5%;
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            font-size: clamp(3rem, 10vw, 10rem);
+            font-weight: bold;
+            color: #1a5f7a;
+            z-index: 0;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2%;
+            z-index: 1;
+        }
+
+        .header h1 {
+            color: #d32f2f; /* IFFCO Red-ish tone */
+            font-size: clamp(12pt, 2.5vw, 24pt);
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .header h2 {
+            color: #1a5f7a;
+            font-size: clamp(10pt, 2vw, 18pt);
+            margin: 1% 0 0 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .ref-date-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3%;
+            font-family: 'Open Sans', sans-serif;
+            font-size: clamp(8pt, 1.2vw, 11pt);
+            z-index: 1;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .content-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2%;
+            z-index: 1;
+        }
+
+        .content-table td {
+            padding: 1% 0.5%;
+            vertical-align: top;
+            font-size: clamp(8pt, 1.3vw, 12pt);
+        }
+
+        .label {
+            font-weight: bold;
+            width: 35%;
+            color: #333;
+        }
+
+        .value {
+            border-bottom: 1px dotted #999;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .certification-text {
+            margin-top: 2%;
+            font-size: clamp(8pt, 1.3vw, 12pt);
+            line-height: 1.6;
+            text-align: justify;
+            z-index: 1;
+        }
+
+        .footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 1;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .qr-block {
+            text-align: center;
+            width: clamp(80px, 15%, 150px);
+        }
+
+        .qr-block img {
+            width: 100%;
+            max-width: 100px;
+            height: auto;
+            aspect-ratio: 1;
+            border: 2px solid #1a5f7a;
+        }
+
+        .qr-block p {
+            font-size: clamp(6pt, 0.9vw, 8pt);
+            margin-top: 5px;
+            color: #666;
+        }
+
+        .signature-block {
+            text-align: center;
+            width: clamp(150px, 30%, 300px);
+            position: relative;
+        }
+
+        .stamp-image {
+            position: absolute;
+            bottom: 20px;
+            left: -60px;
+            width: clamp(60px, 12vw, 120px);
+            height: clamp(60px, 12vw, 120px);
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-bottom: 10px;
+        }
+
+        .address {
+            font-size: clamp(7pt, 1.1vw, 10pt);
+            font-weight: bold;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .border-container {
+                padding: 4%;
+                border-width: 3px;
+            }
+            
+            .stamp-image {
+                left: -40px;
+                bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            .border-container {
+                border-width: 2px;
+            }
+            
+            .footer {
+                justify-content: center;
+            }
+            
+            .stamp-image {
+                left: -30px;
+                bottom: 5px;
+            }
+        }
+
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+                padding: 0;
+            }
+            .page-wrapper {
+                max-width: none;
+                width: 100%;
+                height: 100vh;
+            }
+            .page {
+                box-shadow: none;
+            }
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+    <div class="page">
+        <div class="border-container">
+            <!-- Watermark text (optional placeholder for logo) -->
+            <div class="watermark">IFFCO</div>
+
+            <div class="header">
+                <h1>INDIAN FARMERS FERTILISER CO-OPERATIVE LTD.</h1>
+                <h2>TRAINING CENTRE</h2>
+            </div>
+
+            <div class="ref-date-row">
+                <div><strong>Ref NO:</strong> Voc Trainee / Internee / {batch} / {roll_no}</div>
+                <div><strong>DATE:</strong> {issue_date}</div>
+            </div>
+
+            <table class="content-table">
+                <tr>
+                    <td class="label">NAME OF TRAINEE:</td>
+                    <td class="value">{name}</td>
+                </tr>
+                <tr>
+                    <td class="label">BRANCH:</td>
+                    <td class="value">{department}</td>
+                </tr>
+                <tr>
+                    <td class="label">INSTITUTION:</td>
+                    <td class="value">{college}</td>
+                </tr>
+                <tr>
+                    <td class="label">TRAINING SCHEME:</td>
+                    <td class="value">Unpaid Vocational Training / Unpaid Internship</td>
+                </tr>
+                <tr>
+                    <td class="label">TRAINING PERIOD:</td>
+                    <td class="value">
+                        From: <strong>{start_date}</strong> &nbsp;&nbsp; To: <strong>{end_date}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">PERFORMANCE:</td>
+                    <td class="value">Very Good</td>
+                </tr>
+                <tr>
+                    <td class="label">PROJECT TOPIC:</td>
+                    <td class="value">{project_name}</td>
+                </tr>
+            </table>
+
+            <div class="certification-text">
+                <strong>Certification:</strong> This is to certify that the student has taken his/her training during the period of <strong>{start_date}</strong> To <strong>{end_date}</strong>.
+            </div>
+
+            <div class="footer">
+                <div class="qr-block">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={verify_url}" alt="QR Code">
+                    <p>Scan to verify</p>
+                </div>
+
+                <div class="signature-block">
+                    <img src="/iffco-portal/assets/stamp.png" alt="Official Stamp" class="stamp-image">
+                    <div class="signature-line"></div>
+                    <div class="address">
+                        Head Training Centre<br>
+                        P.O. Ghiyanagar, Prayagraj-212404 (U.P.)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,1629 @@
+/**
+ * UNVER CSS - Universal Neobrutalist CSS Framework
+ * A bold, playful design system inspired by neobrutalism
+ * 
+ * Features:
+ * - Hard shadows & bold borders
+ * - High contrast colors
+ * - Interactive hover effects
+ * - Responsive design
+ * - CSS custom properties for easy theming
+ * 
+ * Usage: Include this CSS and add classes to your HTML elements
+ */
+
+/* ============================================
+   1. CSS CUSTOM PROPERTIES (THEMING)
+   ============================================ */
+:root {
+  /* Core Colors */
+  --unver-primary: #000;
+  --unver-secondary: #fff;
+  --unver-accent: #ff0;
+  --unver-success: #28ca42;
+  --unver-warning: #ffbd2e;
+  --unver-danger: #ff5f57;
+  --unver-muted: #888;
+  
+  /* Semantic Colors */
+  --unver-bg: #fff;
+  --unver-text: #000;
+  --unver-border: #000;
+  --unver-shadow: #888;
+  
+  /* Spacing Scale */
+  --unver-space-xs: 5px;
+  --unver-space-sm: 10px;
+  --unver-space-md: 15px;
+  --unver-space-lg: 20px;
+  --unver-space-xl: 30px;
+  --unver-space-2xl: 40px;
+  --unver-space-3xl: 60px;
+  
+  /* Border & Shadow */
+  --unver-border-width: 4px;
+  --unver-border-width-sm: 2px;
+  --unver-border-width-lg: 6px;
+  --unver-shadow-offset: 8px;
+  --unver-shadow-offset-sm: 4px;
+  --unver-shadow-offset-lg: 12px;
+  --unver-radius: 0;
+  --unver-radius-pill: 50px;
+  --unver-radius-circle: 50%;
+  
+  /* Typography */
+  --unver-font-family: 'Alata', 'Inter', 'Segoe UI', sans-serif;
+  --unver-font-mono: 'Courier New', 'Consolas', monospace;
+  --unver-font-size-xs: 11px;
+  --unver-font-size-sm: 13px;
+  --unver-font-size-base: 14px;
+  --unver-font-size-lg: 16px;
+  --unver-font-size-xl: 18px;
+  --unver-font-size-2xl: 20px;
+  --unver-font-size-3xl: 26px;
+  --unver-font-size-4xl: 36px;
+  --unver-font-size-5xl: 42px;
+  --unver-line-height: 1.6;
+  --unver-font-weight-normal: 400;
+  --unver-font-weight-bold: 700;
+  --unver-font-weight-black: 900;
+  
+  /* Transitions */
+  --unver-transition-fast: 0.2s;
+  --unver-transition-normal: 0.3s;
+  --unver-transition-slow: 0.5s;
+  
+  /* Hover Effect */
+  --unver-hover-translate: -5px;
+  --unver-hover-shadow-extra: 5px;
+  
+  /* Container */
+  --unver-container-max: 1400px;
+  --unver-container-padding: 20px;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --unver-primary: #fff;
+  --unver-secondary: #000;
+  --unver-bg: #1a1a1a;
+  --unver-text: #fff;
+  --unver-border: #fff;
+  --unver-shadow: #444;
+}
+
+/* Color Themes */
+[data-theme="blue"] {
+  --unver-primary: #0066ff;
+  --unver-accent: #00d4ff;
+}
+
+[data-theme="pink"] {
+  --unver-primary: #ff0066;
+  --unver-accent: #ff66b2;
+}
+
+[data-theme="green"] {
+  --unver-primary: #00cc66;
+  --unver-accent: #66ff99;
+}
+
+[data-theme="purple"] {
+  --unver-primary: #6600ff;
+  --unver-accent: #cc66ff;
+}
+
+/* ============================================
+   2. BASE RESET & DEFAULTS
+   ============================================ */
+.unver,
+.unver * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.unver {
+  font-family: var(--unver-font-family);
+  font-size: var(--unver-font-size-base);
+  line-height: var(--unver-line-height);
+  color: var(--unver-text);
+  background-color: var(--unver-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection styling */
+.unver ::selection {
+  background-color: var(--unver-accent);
+  color: var(--unver-primary);
+}
+
+/* ============================================
+   3. ANIMATIONS
+   ============================================ */
+@keyframes unver-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes unver-fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes unver-fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes unver-fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes unver-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes unver-pulse-green {
+  0%, 100% {
+    background-color: var(--unver-success);
+    box-shadow: 0 0 10px var(--unver-success), 0 0 20px var(--unver-success);
+  }
+  50% {
+    background-color: var(--unver-muted);
+    box-shadow: none;
+  }
+}
+
+@keyframes unver-pulse-accent {
+  0%, 100% {
+    background-color: var(--unver-accent);
+    box-shadow: 0 0 10px var(--unver-accent), 0 0 20px var(--unver-accent);
+  }
+  50% {
+    background-color: var(--unver-muted);
+    box-shadow: none;
+  }
+}
+
+@keyframes unver-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes unver-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes unver-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Animation Utility Classes */
+.unver-animate-in {
+  animation: unver-fade-in-up 0.6s ease-out forwards;
+}
+
+.unver-animate-in-down {
+  animation: unver-fade-in-down 0.6s ease-out forwards;
+}
+
+.unver-animate-in-left {
+  animation: unver-fade-in-left 0.6s ease-out forwards;
+}
+
+.unver-animate-in-right {
+  animation: unver-fade-in-right 0.6s ease-out forwards;
+}
+
+.unver-animate-pulse {
+  animation: unver-pulse 2s ease-in-out infinite;
+}
+
+.unver-animate-blink {
+  animation: unver-blink 1s infinite;
+}
+
+.unver-animate-shake {
+  animation: unver-shake 0.5s ease-in-out;
+}
+
+.unver-animate-bounce {
+  animation: unver-bounce 1s ease-in-out infinite;
+}
+
+/* Animation Delays */
+.unver-delay-100 { animation-delay: 0.1s; }
+.unver-delay-200 { animation-delay: 0.2s; }
+.unver-delay-300 { animation-delay: 0.3s; }
+.unver-delay-400 { animation-delay: 0.4s; }
+.unver-delay-500 { animation-delay: 0.5s; }
+
+/* ============================================
+   4. LAYOUT
+   ============================================ */
+.unver-container {
+  max-width: var(--unver-container-max);
+  margin: 0 auto;
+  padding: 0 var(--unver-container-padding);
+}
+
+.unver-container-sm {
+  max-width: 800px;
+}
+
+.unver-container-lg {
+  max-width: 1600px;
+}
+
+.unver-section {
+  padding: var(--unver-space-3xl) 0;
+}
+
+.unver-section-sm {
+  padding: var(--unver-space-xl) 0;
+}
+
+/* Flexbox Utilities */
+.unver-flex {
+  display: flex;
+}
+
+.unver-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.unver-flex-col {
+  flex-direction: column;
+}
+
+.unver-items-center {
+  align-items: center;
+}
+
+.unver-items-start {
+  align-items: flex-start;
+}
+
+.unver-items-end {
+  align-items: flex-end;
+}
+
+.unver-justify-center {
+  justify-content: center;
+}
+
+.unver-justify-between {
+  justify-content: space-between;
+}
+
+.unver-justify-around {
+  justify-content: space-around;
+}
+
+.unver-justify-end {
+  justify-content: flex-end;
+}
+
+.unver-flex-1 {
+  flex: 1;
+}
+
+/* Grid */
+.unver-grid {
+  display: grid;
+  gap: var(--unver-space-lg);
+}
+
+.unver-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.unver-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.unver-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.unver-grid-auto {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.unver-grid-auto-sm {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.unver-grid-auto-lg {
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+/* Gap Utilities */
+.unver-gap-xs { gap: var(--unver-space-xs); }
+.unver-gap-sm { gap: var(--unver-space-sm); }
+.unver-gap-md { gap: var(--unver-space-md); }
+.unver-gap-lg { gap: var(--unver-space-lg); }
+.unver-gap-xl { gap: var(--unver-space-xl); }
+
+/* ============================================
+   5. TYPOGRAPHY
+   ============================================ */
+.unver-h1, .unver h1 {
+  font-size: clamp(var(--unver-font-size-3xl), 6vw, var(--unver-font-size-5xl));
+  font-weight: var(--unver-font-weight-black);
+  line-height: 1.1;
+  margin-bottom: var(--unver-space-lg);
+}
+
+.unver-h2, .unver h2 {
+  font-size: var(--unver-font-size-3xl);
+  font-weight: var(--unver-font-weight-black);
+  margin-bottom: var(--unver-space-md);
+}
+
+.unver-h3, .unver h3 {
+  font-size: var(--unver-font-size-2xl);
+  font-weight: var(--unver-font-weight-bold);
+  margin-bottom: var(--unver-space-sm);
+}
+
+.unver-h4, .unver h4 {
+  font-size: var(--unver-font-size-xl);
+  font-weight: var(--unver-font-weight-bold);
+  margin-bottom: var(--unver-space-sm);
+}
+
+.unver-h5, .unver h5 {
+  font-size: var(--unver-font-size-lg);
+  font-weight: var(--unver-font-weight-bold);
+  margin-bottom: var(--unver-space-xs);
+}
+
+.unver-h6, .unver h6 {
+  font-size: var(--unver-font-size-base);
+  font-weight: var(--unver-font-weight-bold);
+  margin-bottom: var(--unver-space-xs);
+}
+
+.unver-text-xs { font-size: var(--unver-font-size-xs); }
+.unver-text-sm { font-size: var(--unver-font-size-sm); }
+.unver-text-base { font-size: var(--unver-font-size-base); }
+.unver-text-lg { font-size: var(--unver-font-size-lg); }
+.unver-text-xl { font-size: var(--unver-font-size-xl); }
+.unver-text-2xl { font-size: var(--unver-font-size-2xl); }
+
+.unver-font-normal { font-weight: var(--unver-font-weight-normal); }
+.unver-font-bold { font-weight: var(--unver-font-weight-bold); }
+.unver-font-black { font-weight: var(--unver-font-weight-black); }
+
+.unver-text-center { text-align: center; }
+.unver-text-left { text-align: left; }
+.unver-text-right { text-align: right; }
+
+.unver-uppercase { text-transform: uppercase; }
+.unver-lowercase { text-transform: lowercase; }
+.unver-capitalize { text-transform: capitalize; }
+
+.unver-mono {
+  font-family: var(--unver-font-mono);
+}
+
+/* ============================================
+   6. CORE COMPONENTS - THE BOX
+   ============================================ */
+
+/* Base Box - The foundation of neobrutalist design */
+.unver-box {
+  background-color: var(--unver-secondary);
+  border: var(--unver-border-width) solid var(--unver-border);
+  padding: var(--unver-space-lg);
+  transition: all var(--unver-transition-fast);
+}
+
+.unver-box-sm {
+  border-width: var(--unver-border-width-sm);
+  box-shadow: var(--unver-shadow-offset-sm) var(--unver-shadow-offset-sm) 0 var(--unver-shadow);
+  padding: var(--unver-space-md);
+}
+
+.unver-box-lg {
+  border-width: var(--unver-border-width-lg);
+  box-shadow: var(--unver-shadow-offset-lg) var(--unver-shadow-offset-lg) 0 var(--unver-shadow);
+  padding: var(--unver-space-xl);
+}
+
+/* Interactive Box - Lifts on hover */
+.unver-box-interactive {
+  cursor: pointer;
+}
+
+.unver-box-interactive:hover {
+  transform: translate(var(--unver-hover-translate), var(--unver-hover-translate));
+  box-shadow: calc(var(--unver-shadow-offset) + var(--unver-hover-shadow-extra)) 
+              calc(var(--unver-shadow-offset) + var(--unver-hover-shadow-extra)) 0 var(--unver-shadow);
+}
+
+/* Box Color Variants */
+.unver-box-primary {
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+}
+
+.unver-box-accent {
+  background-color: var(--unver-accent);
+  color: var(--unver-primary);
+}
+
+.unver-box-success {
+  background-color: var(--unver-success);
+  color: var(--unver-primary);
+}
+
+.unver-box-warning {
+  background-color: var(--unver-warning);
+  color: var(--unver-primary);
+}
+
+.unver-box-danger {
+  background-color: var(--unver-danger);
+  color: var(--unver-secondary);
+}
+
+/* ============================================
+   7. BUTTONS
+   ============================================ */
+.unver-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--unver-space-sm);
+  padding: var(--unver-space-sm) var(--unver-space-lg);
+  font-size: var(--unver-font-size-base);
+  font-weight: var(--unver-font-weight-bold);
+  font-family: inherit;
+  text-decoration: none;
+  border: var(--unver-border-width) solid var(--unver-border);
+  background-color: var(--unver-secondary);
+  color: var(--unver-text);
+  cursor: pointer;
+  transition: all var(--unver-transition-fast);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.unver-btn:hover {
+  opacity: 0.9;
+}
+
+.unver-btn:active {
+  opacity: 0.8;
+}
+
+/* Button Sizes */
+.unver-btn-sm {
+  padding: var(--unver-space-xs) var(--unver-space-md);
+  font-size: var(--unver-font-size-sm);
+  border-width: var(--unver-border-width-sm);
+  box-shadow: var(--unver-shadow-offset-sm) var(--unver-shadow-offset-sm) 0 var(--unver-shadow);
+}
+
+.unver-btn-lg {
+  padding: var(--unver-space-md) var(--unver-space-xl);
+  font-size: var(--unver-font-size-lg);
+}
+
+/* Button Variants */
+.unver-btn-primary {
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+}
+
+.unver-btn-accent {
+  background-color: var(--unver-accent);
+  color: var(--unver-primary);
+}
+
+.unver-btn-success {
+  background-color: var(--unver-success);
+  color: var(--unver-primary);
+}
+
+.unver-btn-warning {
+  background-color: var(--unver-warning);
+  color: var(--unver-primary);
+}
+
+.unver-btn-danger {
+  background-color: var(--unver-danger);
+  color: var(--unver-secondary);
+}
+
+.unver-btn-outline {
+  background-color: transparent;
+  color: var(--unver-primary);
+}
+
+.unver-btn-outline:hover {
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+}
+
+/* Button Shapes */
+.unver-btn-pill {
+  border-radius: var(--unver-radius-pill);
+}
+
+.unver-btn-circle {
+  border-radius: var(--unver-radius-circle);
+  width: 50px;
+  height: 50px;
+  padding: 0;
+}
+
+/* Button with Status Indicator */
+.unver-btn-status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: var(--unver-radius-circle);
+  background-color: var(--unver-success);
+  animation: unver-pulse-green 2s ease-in-out infinite;
+}
+
+.unver-btn-status-accent::before {
+  background-color: var(--unver-accent);
+  animation: unver-pulse-accent 2s ease-in-out infinite;
+}
+
+/* Button Group */
+.unver-btn-group {
+  display: flex;
+  gap: var(--unver-space-md);
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   8. CARDS
+   ============================================ */
+.unver-card {
+  background-color: var(--unver-secondary);
+  border: var(--unver-border-width) solid var(--unver-border);
+  box-shadow: var(--unver-shadow-offset) var(--unver-shadow-offset) 0 var(--unver-shadow);
+  overflow: hidden;
+  transition: all var(--unver-transition-fast);
+}
+
+.unver-card-interactive:hover {
+  transform: translate(var(--unver-hover-translate), var(--unver-hover-translate));
+  box-shadow: calc(var(--unver-shadow-offset) + var(--unver-hover-shadow-extra)) 
+              calc(var(--unver-shadow-offset) + var(--unver-hover-shadow-extra)) 0 var(--unver-shadow);
+}
+
+.unver-card-header {
+  padding: var(--unver-space-lg);
+  border-bottom: var(--unver-border-width) solid var(--unver-border);
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+}
+
+.unver-card-body {
+  padding: var(--unver-space-lg);
+}
+
+.unver-card-footer {
+  padding: var(--unver-space-lg);
+  border-top: var(--unver-border-width) solid var(--unver-border);
+}
+
+.unver-card-image {
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background-color: #e5e5e5;
+}
+
+.unver-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================================
+   9. WINDOW / MAC STYLE CONTAINER
+   ============================================ */
+.unver-window {
+  background-color: var(--unver-secondary);
+  border: var(--unver-border-width) solid var(--unver-border);
+  box-shadow: var(--unver-shadow-offset) var(--unver-shadow-offset) 0 var(--unver-shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.unver-window-titlebar {
+  background: var(--unver-secondary);
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--unver-space-sm);
+  border-bottom: var(--unver-border-width-sm) solid var(--unver-border);
+  flex-shrink: 0;
+}
+
+.unver-window-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.unver-window-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--unver-radius-circle);
+  border: var(--unver-border-width-sm) solid var(--unver-border);
+}
+
+.unver-window-dot-red { background-color: var(--unver-danger); }
+.unver-window-dot-yellow { background-color: var(--unver-warning); }
+.unver-window-dot-green { background-color: var(--unver-success); }
+
+.unver-window-title {
+  font-size: var(--unver-font-size-xs);
+  font-weight: var(--unver-font-weight-bold);
+}
+
+.unver-window-content {
+  flex: 1;
+  padding: var(--unver-space-lg);
+  overflow: auto;
+}
+
+/* Terminal Style */
+.unver-terminal {
+  background-color: var(--unver-primary);
+  color: #0f0;
+  font-family: var(--unver-font-mono);
+  font-size: var(--unver-font-size-sm);
+}
+
+.unver-terminal .unver-window-content {
+  white-space: pre-wrap;
+}
+
+.unver-cursor {
+  animation: unver-blink 1s infinite;
+}
+
+/* ============================================
+   10. BADGES & TAGS
+   ============================================ */
+.unver-badge {
+  display: inline-block;
+  padding: var(--unver-space-xs) var(--unver-space-sm);
+  font-size: var(--unver-font-size-sm);
+  font-weight: var(--unver-font-weight-bold);
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+  border: var(--unver-border-width-sm) solid var(--unver-border);
+}
+
+.unver-badge-accent {
+  background-color: var(--unver-accent);
+  color: var(--unver-primary);
+}
+
+.unver-badge-success {
+  background-color: var(--unver-success);
+  color: var(--unver-primary);
+}
+
+.unver-badge-warning {
+  background-color: var(--unver-warning);
+  color: var(--unver-primary);
+}
+
+.unver-badge-danger {
+  background-color: var(--unver-danger);
+  color: var(--unver-secondary);
+}
+
+.unver-badge-outline {
+  background-color: transparent;
+  color: var(--unver-primary);
+}
+
+/* Ribbon Badge */
+.unver-ribbon {
+  position: absolute;
+  top: 25px;
+  right: -40px;
+  background-color: var(--unver-accent);
+  color: var(--unver-primary);
+  padding: var(--unver-space-xs) 70px;
+  font-weight: var(--unver-font-weight-black);
+  font-size: var(--unver-font-size-sm);
+  transform: rotate(45deg);
+  z-index: 10;
+  border: 3px solid var(--unver-border);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Tag List */
+.unver-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--unver-space-sm);
+}
+
+/* ============================================
+   11. FORMS
+   ============================================ */
+.unver-input {
+  width: 100%;
+  padding: var(--unver-space-sm) var(--unver-space-md);
+  font-size: var(--unver-font-size-base);
+  font-family: inherit;
+  background-color: var(--unver-secondary);
+  color: var(--unver-text);
+  border: var(--unver-border-width) solid var(--unver-border);
+  transition: all var(--unver-transition-fast);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.unver-input:focus {
+  border-color: var(--unver-primary);
+}
+
+.unver-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.unver-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.unver-checkbox,
+.unver-radio {
+  width: 20px;
+  height: 20px;
+  border: var(--unver-border-width) solid var(--unver-border);
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.unver-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--unver-font-size-sm);
+  font-weight: var(--unver-font-weight-black);
+}
+
+.unver-radio {
+  border-radius: var(--unver-radius-circle);
+}
+
+.unver-radio:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--unver-primary);
+  border-radius: var(--unver-radius-circle);
+}
+
+.unver-label {
+  display: block;
+  font-weight: var(--unver-font-weight-bold);
+  margin-bottom: var(--unver-space-xs);
+}
+
+.unver-form-group {
+  margin-bottom: var(--unver-space-lg);
+}
+
+/* ============================================
+   12. NAVIGATION
+   ============================================ */
+.unver-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--unver-space-lg) 0;
+}
+
+.unver-nav-logo {
+  font-size: var(--unver-font-size-2xl);
+  font-weight: var(--unver-font-weight-black);
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+  padding: var(--unver-space-sm) var(--unver-space-lg);
+  border: var(--unver-border-width) solid var(--unver-border);
+  box-shadow: var(--unver-shadow-offset) var(--unver-shadow-offset) 0 var(--unver-shadow);
+  text-decoration: none;
+}
+
+.unver-nav-links {
+  display: flex;
+  gap: var(--unver-space-md);
+  list-style: none;
+}
+
+.unver-nav-link {
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+  padding: var(--unver-space-sm) var(--unver-space-md);
+  border: var(--unver-border-width) solid var(--unver-border);
+  box-shadow: var(--unver-shadow-offset) var(--unver-shadow-offset) 0 var(--unver-shadow);
+  text-decoration: none;
+  font-weight: var(--unver-font-weight-bold);
+  transition: all var(--unver-transition-fast);
+}
+
+.unver-nav-link:hover {
+  transform: translate(var(--unver-hover-translate), var(--unver-hover-translate));
+  box-shadow: calc(var(--unver-shadow-offset) + var(--unver-hover-shadow-extra)) 
+              calc(var(--unver-shadow-offset) + var(--unver-hover-shadow-extra)) 0 var(--unver-shadow);
+}
+
+.unver-nav-link:nth-child(even) {
+  background-color: var(--unver-secondary);
+  color: var(--unver-primary);
+}
+
+/* ============================================
+   13. FOOTER
+   ============================================ */
+.unver-footer {
+  padding: var(--unver-space-xl) 0;
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+  text-align: center;
+}
+
+.unver-social-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--unver-space-lg);
+  margin-bottom: var(--unver-space-lg);
+}
+
+.unver-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: var(--unver-secondary);
+  border: var(--unver-border-width) solid var(--unver-secondary);
+  color: var(--unver-primary);
+  text-decoration: none;
+  font-size: var(--unver-font-size-2xl);
+  transition: all var(--unver-transition-fast);
+}
+
+.unver-social-link:hover {
+  transform: translate(var(--unver-hover-translate), var(--unver-hover-translate));
+  box-shadow: 5px 5px 0 var(--unver-shadow);
+}
+
+/* ============================================
+   14. TOOLTIPS
+   ============================================ */
+.unver-tooltip {
+  position: absolute;
+  background-color: var(--unver-accent);
+  color: var(--unver-primary);
+  padding: var(--unver-space-sm) var(--unver-space-md);
+  border: 3px solid var(--unver-border);
+  box-shadow: 5px 5px 0 var(--unver-shadow);
+  font-weight: var(--unver-font-weight-bold);
+  font-size: var(--unver-font-size-sm);
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.unver-tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.unver-tooltip-bottom .unver-tooltip-arrow {
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid var(--unver-border);
+}
+
+/* ============================================
+   15. CONTEXT MENU
+   ============================================ */
+.unver-context-menu {
+  position: fixed;
+  background-color: var(--unver-secondary);
+  border: var(--unver-border-width) solid var(--unver-border);
+  box-shadow: var(--unver-shadow-offset) var(--unver-shadow-offset) 0 var(--unver-shadow);
+  padding: var(--unver-space-sm) 0;
+  z-index: 10000;
+  min-width: 200px;
+}
+
+.unver-context-menu-item {
+  padding: var(--unver-space-sm) var(--unver-space-lg);
+  cursor: pointer;
+  font-weight: var(--unver-font-weight-bold);
+  transition: all var(--unver-transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--unver-space-sm);
+}
+
+.unver-context-menu-item:hover {
+  background-color: var(--unver-primary);
+  color: var(--unver-secondary);
+}
+
+/* ============================================
+   16. UTILITIES
+   ============================================ */
+
+/* Colors */
+.unver-bg-primary { background-color: var(--unver-primary); }
+.unver-bg-secondary { background-color: var(--unver-secondary); }
+.unver-bg-accent { background-color: var(--unver-accent); }
+.unver-bg-success { background-color: var(--unver-success); }
+.unver-bg-warning { background-color: var(--unver-warning); }
+.unver-bg-danger { background-color: var(--unver-danger); }
+
+.unver-text-primary { color: var(--unver-primary); }
+.unver-text-secondary { color: var(--unver-secondary); }
+.unver-text-accent { color: var(--unver-accent); }
+.unver-text-success { color: var(--unver-success); }
+.unver-text-warning { color: var(--unver-warning); }
+.unver-text-danger { color: var(--unver-danger); }
+.unver-text-muted { color: var(--unver-muted); }
+
+/* Spacing */
+.unver-m-0 { margin: 0; }
+.unver-m-xs { margin: var(--unver-space-xs); }
+.unver-m-sm { margin: var(--unver-space-sm); }
+.unver-m-md { margin: var(--unver-space-md); }
+.unver-m-lg { margin: var(--unver-space-lg); }
+.unver-m-xl { margin: var(--unver-space-xl); }
+
+.unver-mt-0 { margin-top: 0; }
+.unver-mt-sm { margin-top: var(--unver-space-sm); }
+.unver-mt-md { margin-top: var(--unver-space-md); }
+.unver-mt-lg { margin-top: var(--unver-space-lg); }
+.unver-mt-xl { margin-top: var(--unver-space-xl); }
+
+.unver-mb-0 { margin-bottom: 0; }
+.unver-mb-sm { margin-bottom: var(--unver-space-sm); }
+.unver-mb-md { margin-bottom: var(--unver-space-md); }
+.unver-mb-lg { margin-bottom: var(--unver-space-lg); }
+.unver-mb-xl { margin-bottom: var(--unver-space-xl); }
+
+.unver-p-0 { padding: 0; }
+.unver-p-xs { padding: var(--unver-space-xs); }
+.unver-p-sm { padding: var(--unver-space-sm); }
+.unver-p-md { padding: var(--unver-space-md); }
+.unver-p-lg { padding: var(--unver-space-lg); }
+.unver-p-xl { padding: var(--unver-space-xl); }
+
+/* Display */
+.unver-block { display: block; }
+.unver-inline-block { display: inline-block; }
+.unver-inline { display: inline; }
+.unver-hidden { display: none; }
+
+/* Position */
+.unver-relative { position: relative; }
+.unver-absolute { position: absolute; }
+.unver-fixed { position: fixed; }
+.unver-sticky { position: sticky; }
+
+/* Width & Height */
+.unver-w-full { width: 100%; }
+.unver-h-full { height: 100%; }
+.unver-min-h-screen { min-height: 100vh; }
+
+/* Overflow */
+.unver-overflow-hidden { overflow: hidden; }
+.unver-overflow-auto { overflow: auto; }
+
+/* Cursor */
+.unver-cursor-pointer { cursor: pointer; }
+.unver-cursor-default { cursor: default; }
+
+/* Z-index */
+.unver-z-0 { z-index: 0; }
+.unver-z-10 { z-index: 10; }
+.unver-z-50 { z-index: 50; }
+.unver-z-100 { z-index: 100; }
+
+/* ============================================
+   17. RESPONSIVE BREAKPOINTS
+   ============================================ */
+@media (max-width: 1024px) {
+  :root {
+    --unver-container-padding: 15px;
+  }
+  
+  .unver-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --unver-border-width: 3px;
+    --unver-shadow-offset: 5px;
+  }
+  
+  .unver-h1, .unver h1 {
+    font-size: clamp(28px, 10vw, 40px);
+  }
+  
+  .unver-section {
+    padding: var(--unver-space-2xl) 0;
+  }
+  
+  .unver-nav-links {
+    display: none;
+  }
+  
+  .unver-grid-2,
+  .unver-grid-3,
+  .unver-grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .unver-grid-auto-lg {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Show mobile nav */
+  .unver-nav-mobile {
+    display: flex;
+  }
+  
+  .unver-hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --unver-shadow-offset: 4px;
+    --unver-space-lg: 15px;
+    --unver-space-xl: 20px;
+  }
+  
+  .unver-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .unver-btn-group {
+    flex-direction: column;
+  }
+}
+
+/* ============================================
+   18. PRINT STYLES
+   ============================================ */
+@media print {
+  .unver-box,
+  .unver-card,
+  .unver-btn {
+    box-shadow: none;
+    border-width: 1px;
+  }
+  
+  .unver-animate-in,
+  .unver-animate-pulse {
+    animation: none;
+  }
+}
+
+/* ============================================
+   19. ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .unver *,
+  .unver *::before,
+  .unver *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.unver-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus Styles */
+.unver-btn:focus-visible,
+.unver-input:focus-visible,
+.unver-nav-link:focus-visible {
+  outline: 3px solid var(--unver-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   20. PROJECT-SPECIFIC UTILITIES
+   ============================================ */
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.unver-bg-cover {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.unver-bg-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.unver-bg-opacity-30 { background-color: rgba(255, 255, 255, 0.3); }
+.unver-bg-opacity-95 { background-color: rgba(255, 255, 255, 0.95); }
+.unver-bg-opacity-20 { background-color: rgba(255, 255, 255, 0.2); }
+
+.unver-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease-out;
+  opacity: 1;
+}
+
+.unver-loading-overlay.unver-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.unver-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: unver-spin 1s linear infinite;
+}
+
+@keyframes unver-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.unver-demo-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  font-weight: bold;
+  z-index: 100;
+  border-bottom: 2px solid #000;
+}
+
+.unver-demo-watermark {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #000;
+  z-index: 100;
+  font-size: 14px;
+}
+
+.unver-mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  outline: none;
+}
+
+.unver-mobile-menu-btn:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+.unver-menu-icon {
+  display: block;
+  position: relative;
+  width: 24px;
+  height: 18px;
+}
+
+.unver-menu-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.unver-menu-line-1 { top: 0; }
+.unver-menu-line-2 { top: 50%; transform: translateY(-50%); }
+.unver-menu-line-3 { bottom: 0; }
+
+.unver-mobile-menu-btn.active .unver-menu-line-1 {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.unver-mobile-menu-btn.active .unver-menu-line-2 {
+  opacity: 0;
+}
+
+.unver-mobile-menu-btn.active .unver-menu-line-3 {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.unver-sidebar {
+  width: 256px;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  overflow-y: hidden;
+}
+
+.unver-sidebar-dark {
+  background-color: #1f2937;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+/* Mobile sidebar behavior */
+@media (max-width: 768px) {
+  .unver-mobile-menu-btn {
+    display: block;
+  }
+
+  .unver-sidebar,
+  .unver-sidebar-dark {
+    position: fixed;
+    transform: translateX(-100%);
+    z-index: 40;
+    transition: transform 0.3s ease-in-out;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .unver-sidebar.active,
+  .unver-sidebar-dark.active {
+    transform: translateX(0);
+  }
+}
+
+.unver-tooltip-trigger {
+  position: relative;
+  cursor: pointer;
+}
+
+.unver-tooltip-trigger .unver-tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background-color: #1f2937;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1000;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.unver-tooltip-trigger .unver-tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1f2937 transparent transparent transparent;
+}
+
+.unver-tooltip-trigger:hover .unver-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.unver-fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+.unver-fade-in.unver-visible {
+  opacity: 1;
+}
+
+.unver-slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.unver-slide-up-reveal {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.unver-countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(60px, 18vw, 120px);
+  font-weight: 800;
+  color: transparent;
+  background: linear-gradient(90deg,
+              rgba(255, 215, 0, 0.7) 0%,
+              rgba(255, 215, 0, 0.2) 20%,
+              rgba(255, 215, 0, 0.2) 80%,
+              rgba(255, 215, 0, 0.7) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-size: 200% 100%;
+  animation: unver-wave-animation 2s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+  z-index: 10;
+  text-align: center;
+  width: fit-content;
+  max-width: 90%;
+  padding: 0 10px;
+  white-space: nowrap;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+@keyframes unver-wave-animation {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.unver-loading-lines {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.unver-loading-line {
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, 
+              rgba(255, 215, 0, 0.7) 0%, 
+              rgba(255, 215, 0, 0.2) 20%, 
+              rgba(255, 215, 0, 0.2) 80%, 
+              rgba(255, 215, 0, 0.7) 100%);
+  background-size: 200% 100%;
+  animation: unver-wave-animation 2s linear infinite;
+  opacity: 0.9;
+}
+
+.unver-loading-line-1 { width: 70%; }
+.unver-loading-line-2 { width: 85%; }
+.unver-loading-line-3 { width: 100%; }
+
+.unver-scene {
+  position: relative;
+  width: 90vw;
+  height: 90vw;
+  max-width: 400px;
+  max-height: 400px;
+  min-width: 280px;
+  min-height: 280px;
+}
+
+/* Toast Notifications */
+@keyframes unver-toast-in {
+  from { transform: translateX(400px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes unver-toast-out {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(400px); opacity: 0; }
+}
+
+.unver-toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.unver-toast {
+  min-width: 300px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 4px solid #000;
+  box-shadow: 8px 8px 0 #888;
+  font-weight: bold;
+  animation: unver-toast-in 0.3s ease-out;
+}
+
+.unver-toast.hiding {
+  animation: unver-toast-out 0.3s ease-out forwards;
+}
+
+.unver-toast-success {
+  background: var(--unver-success);
+  color: #000;
+}
+
+.unver-toast-error {
+  background: var(--unver-danger);
+  color: #fff;
+}
+
+.unver-toast-info {
+  background: var(--unver-primary);
+  color: #fff;
+}
+/* Custom Confirmation Dialog */
+.unver-dialog-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+}
+
+.unver-dialog-overlay.show {
+  display: flex;
+}
+
+.unver-dialog {
+  background: #fff;
+  border: 4px solid #000;
+  box-shadow: 12px 12px 0 #888;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.unver-dialog-title {
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.unver-dialog-message {
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.unver-dialog-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 20px 16px !important;
+  }
+  
+  .unver-card-body {
+    padding: 12px !important;
+  }
+}
